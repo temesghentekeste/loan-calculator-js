@@ -26,6 +26,29 @@ UIform.addEventListener('submit', e => {
     UItotalPayment.value = (monthly*calculatedPayments).toFixed(2);
     UItotalInterest.value = ((monthly*calculatedPayments)-principal).toFixed(2);
   }else{
-    console.log('Please check your number')
+    showError('Please check your numbers');
   }
 });
+
+const showError = error => {
+
+  // Create div for error message
+  const UIerrorDiv = document.createElement('div');
+
+  // Get elements
+  const UIcard = document.querySelector('.card');
+  const UIheading = document.querySelector('.heading');
+  
+  // Add class to the div
+  UIerrorDiv.className = 'alert alert-danger';
+  // Add textNode and append to the div
+  UIerrorDiv.appendChild(document.createTextNode(error));
+
+  // Insert error above heading
+  UIcard.insertBefore(UIerrorDiv, UIheading);
+
+  // Clear error after 3 seconds
+  setTimeout(()=>{
+    document.querySelector('.alert').remove();
+  }, 3000);
+}
