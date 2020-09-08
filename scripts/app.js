@@ -4,31 +4,51 @@ const UIform = document.querySelector('#loan-form');
 UIform.addEventListener('submit', e => {
   e.preventDefault();
 
-  // UI vars
-  const UIamount = document.querySelector('#amount');
-  const UIinterest = document.querySelector('#interest');
-  const UIyears = document.querySelector('#years');
-  const UImonthlyPayment = document.querySelector('#monthly-payment');
-  const UItotalPayment = document.querySelector('#total-payment');
-  const UItotalInterest = document.querySelector('#total-interest');
+  // Hide results
+  document.querySelector('#results').style.display = 'none';
+  
+  // Display loader
+  document.querySelector('#loading').style.display = 'block';
 
-  const principal = parseFloat(UIamount.value);
-  const calculatedInterest = parseFloat(UIinterest.value) / 100 / 12;
-  const calculatedPayments = parseFloat(UIyears.value) * 12;
-
-  // Compute monthly payment
-  const x = Math.pow( 1 + calculatedInterest, calculatedPayments);
-  const monthly = (principal*x*calculatedInterest)/(x-1);
-
-  if(isFinite(monthly)){
-    // Display our results
-    UImonthlyPayment.value = monthly.toFixed(2);
-    UItotalPayment.value = (monthly*calculatedPayments).toFixed(2);
-    UItotalInterest.value = ((monthly*calculatedPayments)-principal).toFixed(2);
-  }else{
-    showError('Please check your numbers');
-  }
+  setTimeout(() => {
+    calculateResult();
+  }, 2000);
+ 
 });
+
+const calculateResult = () => {
+   // UI vars
+   const UIamount = document.querySelector('#amount');
+   const UIinterest = document.querySelector('#interest');
+   const UIyears = document.querySelector('#years');
+   const UImonthlyPayment = document.querySelector('#monthly-payment');
+   const UItotalPayment = document.querySelector('#total-payment');
+   const UItotalInterest = document.querySelector('#total-interest');
+ 
+   const principal = parseFloat(UIamount.value);
+   const calculatedInterest = parseFloat(UIinterest.value) / 100 / 12;
+   const calculatedPayments = parseFloat(UIyears.value) * 12;
+ 
+   // Compute monthly payment
+   const x = Math.pow( 1 + calculatedInterest, calculatedPayments);
+   const monthly = (principal*x*calculatedInterest)/(x-1);
+ 
+   if(isFinite(monthly)){
+     // Display our results
+     UImonthlyPayment.value = monthly.toFixed(2);
+     UItotalPayment.value = (monthly*calculatedPayments).toFixed(2);
+     UItotalInterest.value = ((monthly*calculatedPayments)-principal).toFixed(2);
+
+    // Show results
+    document.querySelector('#results').style.display = 'block';
+    // Hide loader
+    document.querySelector('#loading').style.display = 'none';
+   }else{
+     // Hide loader
+     document.querySelector('#loading').style.display = 'none';
+     showError('Please check your numbers');
+   }
+};
 
 const showError = error => {
 
